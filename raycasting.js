@@ -1,17 +1,12 @@
 'use strict';
 
-function Point(x, y){
-	this.x = x;
-	this.y = y;
-}
-
 function Camera(){
 	// Camera position
-	this.pos = new Point(22, 12);
+	this.pos = {x: 22, y: 12};
 	// Direction vector (from position to direction)
-	this.dir = new Point(-1, 0);
+	this.dir = {x: -1, y: 0};
 	// Camera plane vector (from direction to plane)
-	this.plane = new Point(0, .66);
+	this.plane = {x: 0, y: .66};
 }
 Camera.prototype.rotate = function(angle){
 	// TODO -- understand exactly what is going on with this rotation matrix
@@ -34,10 +29,10 @@ Camera.prototype.render = function(canvas, ctx){
 	// Cast a ray for each vertical column on the canvas
 	for(var canvasX=0; canvasX < canvas.width; canvasX++){
 		// Ray starts at camera position
-		var rayOrigin = new Point(this.pos.x, this.pos.y);
+		var rayOrigin = {x: this.pos.x, y: this.pos.y};
 
 		// Map coordinates for ray's current posisition
-		var mapPos = new Point(Math.floor(rayOrigin.x), Math.floor(rayOrigin.y))
+		var mapPos = {x: Math.floor(rayOrigin.x), y: Math.floor(rayOrigin.y)};
 
 		// Position scalar for camera plane, range is [-1, 1]
 		// The left end of the canvas is -1, the center is 0, and right is 1
@@ -45,10 +40,10 @@ Camera.prototype.render = function(canvas, ctx){
 
 		// Ray direction vector -- add the plane vector multiplied by
 		// the plane scalar to the camera direction
-		var rayDir = new Point(
-			this.plane.x*planeScalar + this.dir.x,
-			this.plane.y*planeScalar + this.dir.y
-		);
+		var rayDir = {
+			x: this.plane.x*planeScalar + this.dir.x,
+			y: this.plane.y*planeScalar + this.dir.y
+		};
 
 		// Distance the ray must travel to move one map column or row
 		// TODO -- understand this formula
@@ -60,7 +55,7 @@ Camera.prototype.render = function(canvas, ctx){
 		// from the ray origin
 		// The mapStep variables store the direction to move on the map
 		// grid as the ray moves through grid squares
-		var rayDistance = new Point(0, 0);
+		var rayDistance = {x: 0, y: 0};
 		var mapStepX;
 		var mapStepY;
 		if(rayDir.x < 0){
