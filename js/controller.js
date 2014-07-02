@@ -19,6 +19,7 @@ function Controller(camera){
 				controller.states.right = true
 				break;
 			case 37:
+			case 65:
 				controller.states.left = true
 				break;
 			case 38:
@@ -38,6 +39,7 @@ function Controller(camera){
 				controller.states.right = false;
 				break;
 			case 37:
+			case 65:
 				controller.states.left = false;
 				break;
 			case 38:
