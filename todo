@@ -1,0 +1,3 @@
+*	Make map an object with methods for getting data at a specific
+	coordinate. I think this will help with dynamic maps.
+*	Break out constants definitions into some less-inline location.
