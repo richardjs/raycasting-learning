@@ -92,7 +92,7 @@ Camera.prototype.render = function(canvas, ctx){
 			}
 
 			//TODO -- integrate map into the rewritten code
-			if(map[mapPos.x][mapPos.y] > 0){
+			if(map.at(mapPos.x, mapPos.y) > 0){
 				hit = true;
 			}
 		}

@@ -65,18 +65,18 @@ Controller.prototype.update = function(delta){
 		camera.rotate(ROTATE_SPEED * delta);
 	}
 	if(this.states.up){
-		if(map[Math.floor(camera.pos.x + camera.dir.x*MOVE_SPEED*delta)][Math.floor(camera.pos.y)] == 0){
+		if(map.at(Math.floor(camera.pos.x + camera.dir.x*MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
 			camera.pos.x += camera.dir.x * MOVE_SPEED * delta;
 		}
-		if(map[Math.floor(camera.pos.x)][Math.floor(camera.pos.y + camera.dir.y*MOVE_SPEED*delta)] == 0){
+		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y + camera.dir.y*MOVE_SPEED*delta)) == 0){
 			camera.pos.y += camera.dir.y * MOVE_SPEED * delta;
 		}
 	}
 	if(this.states.down){
-		if(map[Math.floor(camera.pos.x - camera.dir.x*MOVE_SPEED*delta)][Math.floor(camera.pos.y)] == 0){
+		if(map.at(Math.floor(camera.pos.x - camera.dir.x*MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
 			camera.pos.x -= camera.dir.x * MOVE_SPEED * delta;
 		}
-		if(map[Math.floor(camera.pos.x)][Math.floor(camera.pos.y - camera.dir.y*MOVE_SPEED*delta)] == 0){
+		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y - camera.dir.y*MOVE_SPEED*delta)) == 0){
 			camera.pos.y -= camera.dir.y * MOVE_SPEED * delta;
 		}
 	}

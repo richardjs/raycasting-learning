@@ -1,4 +1,19 @@
-var map = [
+'use strict';
+
+function Map(data){
+	this.data = data	
+}
+Map.prototype.at = function(x, y){
+	// Either pass two arguments or a point object (i.e. {x: 0, y: 0})
+	if(y == undefined){
+		y = x.y;
+		x = x.x;
+	}
+
+	return this.data[x][y];
+}
+
+var DATA = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -24,3 +39,5 @@ var map = [
   [1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
+
+var map = new Map(DATA);
