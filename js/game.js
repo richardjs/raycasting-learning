@@ -8,7 +8,7 @@ function Game(canvas){
 Game.prototype.start = function(){
 	var gameloop = this;
 
-	var camera = new Camera();
+	var camera = new Camera(map);
 	window.camera = camera;
 
 	var controller = new Controller(camera);

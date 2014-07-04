@@ -1,12 +1,14 @@
 'use strict';
 
-function Camera(){
+function Camera(map){
 	// Camera position
 	this.pos = {x: 22, y: 12};
 	// Direction vector (from position to direction)
 	this.dir = {x: -1, y: 0};
 	// Camera plane vector (from direction to plane)
 	this.plane = {x: 0, y: .66};
+
+	this.map = map;
 }
 Camera.prototype.rotate = function(angle){
 	// TODO -- understand exactly what is going on with this rotation matrix
@@ -92,7 +94,7 @@ Camera.prototype.render = function(canvas, ctx){
 			}
 
 			//TODO -- integrate map into the rewritten code
-			if(map.at(mapPos.x, mapPos.y) > 0){
+			if(this.map.at(mapPos.x, mapPos.y) > 0){
 				hit = true;
 			}
 		}

@@ -57,6 +57,7 @@ Controller.prototype.update = function(delta){
 	var ROTATE_SPEED = 2*Math.PI/3/1000;
 	var MOVE_SPEED = 7/1000;
 	var camera = this.camera;
+	var map = camera.map;
 	
 	if(this.states.right){
 		camera.rotate(-ROTATE_SPEED * delta);
