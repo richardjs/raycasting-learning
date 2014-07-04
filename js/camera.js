@@ -16,6 +16,7 @@ Camera.prototype.GROUND_COLOR = '#757';
 Camera.prototype.WALL_X_COLOR = '#5a5';
 Camera.prototype.WALL_Y_COLOR = '#272';
 Camera.prototype.WALL_HEIGHT = 1.6;
+Camera.prototype.MAX_DISTANCE = 0;
 
 Camera.prototype.rotate = function(angle){
 	// TODO -- understand exactly what is going on with this rotation matrix
@@ -93,17 +94,40 @@ Camera.prototype.render = function(canvas, ctx){
 				rayDistance.x += colDelta;
 				mapPos.x += mapStepX;
 				lastSide = SIDES.X;
+
+				if(this.MAX_DISTANCE){
+					var distance = Math.abs(
+						(mapPos.x - rayOrigin.x + (1 - mapStepX)/2) / rayDir.x
+					);
+					if(distance > this.MAX_DISTANCE){
+						break;
+					}
+				}
 			}else{
 				// Move the ray one map row
 				rayDistance.y += rowDelta;
 				mapPos.y += mapStepY;
 				lastSide = SIDES.Y;
+
+				if(this.MAX_DISTANCE){
+					var distance = Math.abs(
+						(mapPos.y - rayOrigin.y + (1 - mapStepY)/2) / rayDir.y
+					);
+					if(distance > this.MAX_DISTANCE){
+						break;
+					}
+				}
 			}
 
-			//TODO -- integrate map into the rewritten code
 			if(this.map.at(mapPos.x, mapPos.y) > 0){
 				hit = true;
 			}
+		}
+
+		// If the ray didn't hit a wall (e.g. it hit its max distance),
+		// don't draw a wall at that distance; just move on
+		if(!hit){
+			continue;
 		}
 
 		// Calculate the distance to hit wall
