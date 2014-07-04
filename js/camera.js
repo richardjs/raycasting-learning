@@ -145,7 +145,7 @@ Camera.prototype.render = function(canvas, ctx){
 
 		// Calculate height of line and canvas y value for top of
 		// this vertical slice
-		var lineHeight = Math.abs(Math.floor(canvas.height / wallDistance)) * this.WALL_HEIGHT;
+		var lineHeight = Math.abs(Math.floor(canvas.height * this.WALL_HEIGHT / wallDistance));
 		var lineTop = canvas.height/2 - lineHeight/2;
 
 		// And draw it
