@@ -1,1 +1,3 @@
 *	Break out constants definitions into some less-inline location.
+*	Figure out what's up with the coordinate system and the map -- 
+	something doesn't seem rght.
