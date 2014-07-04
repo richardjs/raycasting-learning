@@ -27,5 +27,6 @@ Game.prototype.start = function(){
 	window.requestAnimationFrame(frame);
 }
 
+var map = new Map(DATA);
 var game = new Game(document.getElementById('canvas'));
 game.start();

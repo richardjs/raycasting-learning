@@ -10,6 +10,13 @@ function Camera(map){
 
 	this.map = map;
 }
+
+Camera.prototype.SKY_COLOR = '#55a';
+Camera.prototype.GROUND_COLOR = '#757';
+Camera.prototype.WALL_X_COLOR = '#5a5';
+Camera.prototype.WALL_Y_COLOR = '#272';
+Camera.prototype.WALL_HEIGHT = 1.6;
+
 Camera.prototype.rotate = function(angle){
 	// TODO -- understand exactly what is going on with this rotation matrix
 	var oldDirX = this.dir.x;
@@ -23,9 +30,9 @@ Camera.prototype.rotate = function(angle){
 Camera.prototype.update = function(delta){
 }
 Camera.prototype.render = function(canvas, ctx){
-	ctx.fillStyle = '#55a';
+	ctx.fillStyle = this.SKY_COLOR;
 	ctx.fillRect(0, 0, canvas.width, canvas.height/2);
-	ctx.fillStyle = '#757';
+	ctx.fillStyle = this.GROUND_COLOR;
 	ctx.fillRect(0, canvas.height/2, canvas.width, canvas.height/2);
 
 	// Cast a ray for each vertical column on the canvas
@@ -114,15 +121,14 @@ Camera.prototype.render = function(canvas, ctx){
 
 		// Calculate height of line and canvas y value for top of
 		// this vertical slice
-		// TODO -- break out magic wall height number
-		var lineHeight = Math.abs(Math.floor(canvas.height / wallDistance));
+		var lineHeight = Math.abs(Math.floor(canvas.height / wallDistance)) * this.WALL_HEIGHT;
 		var lineTop = canvas.height/2 - lineHeight/2;
 
 		// And draw it
 		if(lastSide == SIDES.X){
-			ctx.fillStyle = '#5a5';
+			ctx.fillStyle = this.WALL_X_COLOR;
 		}else{
-			ctx.fillStyle = '#272';
+			ctx.fillStyle = this.WALL_Y_COLOR;
 		}
 		ctx.fillRect(canvasX, lineTop, 1, lineHeight);
 	}

@@ -53,32 +53,34 @@ function Controller(camera){
 		}
 	});
 }
+
+Controller.prototype.ROTATE_SPEED = 2*Math.PI/3/1000;
+Controller.prototype.MOVE_SPEED = 7/1000;
+
 Controller.prototype.update = function(delta){
-	var ROTATE_SPEED = 2*Math.PI/3/1000;
-	var MOVE_SPEED = 7/1000;
 	var camera = this.camera;
 	var map = camera.map;
 	
 	if(this.states.right){
-		camera.rotate(-ROTATE_SPEED * delta);
+		camera.rotate(-this.ROTATE_SPEED * delta);
 	}
 	if(this.states.left){
-		camera.rotate(ROTATE_SPEED * delta);
+		camera.rotate(this.ROTATE_SPEED * delta);
 	}
 	if(this.states.up){
-		if(map.at(Math.floor(camera.pos.x + camera.dir.x*MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
-			camera.pos.x += camera.dir.x * MOVE_SPEED * delta;
+		if(map.at(Math.floor(camera.pos.x + camera.dir.x*this.MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
+			camera.pos.x += camera.dir.x * this.MOVE_SPEED * delta;
 		}
-		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y + camera.dir.y*MOVE_SPEED*delta)) == 0){
-			camera.pos.y += camera.dir.y * MOVE_SPEED * delta;
+		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y + camera.dir.y*this.MOVE_SPEED*delta)) == 0){
+			camera.pos.y += camera.dir.y * this.MOVE_SPEED * delta;
 		}
 	}
 	if(this.states.down){
-		if(map.at(Math.floor(camera.pos.x - camera.dir.x*MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
-			camera.pos.x -= camera.dir.x * MOVE_SPEED * delta;
+		if(map.at(Math.floor(camera.pos.x - camera.dir.x*this.MOVE_SPEED*delta), Math.floor(camera.pos.y)) == 0){
+			camera.pos.x -= camera.dir.x * this.MOVE_SPEED * delta;
 		}
-		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y - camera.dir.y*MOVE_SPEED*delta)) == 0){
-			camera.pos.y -= camera.dir.y * MOVE_SPEED * delta;
+		if(map.at(Math.floor(camera.pos.x), Math.floor(camera.pos.y - camera.dir.y*this.MOVE_SPEED*delta)) == 0){
+			camera.pos.y -= camera.dir.y * this.MOVE_SPEED * delta;
 		}
 	}
 }
