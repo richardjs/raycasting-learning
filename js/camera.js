@@ -184,5 +184,10 @@ Camera.prototype.render = function(canvas, ctx){
 			texX, 0, 1, wallTexture.height,
 			canvasX, lineTop, 1, lineHeight
 		)
+
+		if(lastSide == 1){
+			ctx.fillStyle = 'rgba(0, 0, 0, .6)';
+			ctx.fillRect(canvasX, lineTop, 1, lineHeight);
+		}
 	}
 }
