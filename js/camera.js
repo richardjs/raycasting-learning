@@ -151,37 +151,26 @@ Camera.prototype.render = function(canvas, ctx){
 		var lineHeight = Math.abs(Math.floor(canvas.height * this.WALL_HEIGHT / wallDistance));
 		var lineTop = canvas.height/2 - lineHeight/2;
 
-		/*
-		// And draw it
-		if(lastSide == SIDES.X){
-			ctx.fillStyle = this.WALL_X_COLOR;
-		}else{
-			ctx.fillStyle = this.WALL_Y_COLOR;
-		}
-		ctx.fillRect(canvasX, lineTop, 1, lineHeight);
-		*/
-
 		// TODO -- understand these formulas for texture drawing
-		// TODO -- clean up to make idiomatic with rest of code
 
-		var wallX;
+		var wallScalar;
 		if(lastSide == 1){
-			wallX = rayOrigin.x + ((mapPos.y - rayOrigin.y + (1 - mapStepY) / 2) / rayDir.y) * rayDir.x;
+			wallScalar = rayOrigin.x + ((mapPos.y - rayOrigin.y + (1 - mapStepY) / 2) / rayDir.y) * rayDir.x;
 		}else{
-			wallX = rayOrigin.y + ((mapPos.x - rayOrigin.x + (1 - mapStepX) / 2) / rayDir.x) * rayDir.y;
+			wallScalar = rayOrigin.y + ((mapPos.x - rayOrigin.x + (1 - mapStepX) / 2) / rayDir.x) * rayDir.y;
 		}
-		wallX -= Math.floor(wallX);
+		wallScalar -= Math.floor(wallScalar);
 
-		var texX = Math.floor(wallX * wallTexture.width);
+		var textureX = Math.floor(wallScalar * wallTexture.width);
 		if(lastSide == 0 && rayDir.x > 0){
-			texX = wallTexture.width - texX - 1;
+			textureX = wallTexture.width - textureX - 1;
 		}else if(lastSide == 1 && rayDir.y < 0){
-			texX = wallTexture.width - texX - 1;
+			textureX = wallTexture.width - textureX - 1;
 		}
 
 		ctx.drawImage(
 			wallTexture,
-			texX, 0, 1, wallTexture.height,
+			textureX, 0, 1, wallTexture.height,
 			canvasX, lineTop, 1, lineHeight
 		)
 
