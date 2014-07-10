@@ -2,6 +2,8 @@
 
 var wallTexture = new Image();
 wallTexture.src = 'img/checkered.png';
+var spriteTexture = new Image();
+spriteTexture.src = 'img/ball.png';
 
 function Camera(map){
 	// Camera position
@@ -40,6 +42,7 @@ Camera.prototype.render = function(canvas, ctx){
 	ctx.fillRect(0, canvas.height/2, canvas.width, canvas.height/2);
 
 	// Cast a ray for each vertical column on the canvas
+	var zBuffer = new Array();
 	for(var canvasX=0; canvasX < canvas.width; canvasX++){
 		// Ray starts at camera position
 		var rayOrigin = {x: this.pos.x, y: this.pos.y};
@@ -177,6 +180,66 @@ Camera.prototype.render = function(canvas, ctx){
 		if(lastSide == 1){
 			ctx.fillStyle = 'rgba(0, 0, 0, .6)';
 			ctx.fillRect(canvasX, lineTop, 1, lineHeight);
+		}
+
+		// zBuffer for sprites
+		zBuffer[canvasX] = wallDistance;
+		window.zBuffer = zBuffer;
+	}
+
+	// Draw sprites
+	// TODO -- clean up to fit with rest of code
+	var sprites = [
+		{x: 15, y: 15}
+	]
+	var spriteOrder = new Array();
+	var spriteDistSquared = new Array();
+	for(var i = 0; i < sprites.length; i++){
+		var sprite = sprites[i];
+		spriteOrder[i] = i;
+		var spriteXDist = this.pos.x - sprite.x;
+		var spriteYDist = this.pos.y - sprite.y;
+		spriteDistSquared[i] = spriteXDist*spriteXDist + spriteYDist*spriteYDist;
+	}
+
+	// TODO: sort
+
+	for(var i = 0; i < sprites.length; i++){
+		var spriteX = sprites[spriteOrder[i]].x - this.pos.x;
+		var spriteY = sprites[spriteOrder[i]].y - this.pos.y;
+
+		var invDet = 1.0 / (this.plane.x*this.dir.y - this.dir.x*this.plane.y)
+
+		var transformX = invDet * (this.dir.y*spriteX - this.dir.x*spriteY);
+		var transformY = invDet * (-this.plane.y*spriteX + this.plane.x*spriteY);
+
+		var spriteScreenX = Math.floor((canvas.width/2) * (1 + transformX/transformY));
+
+		var spriteHeight = Math.abs(Math.floor(canvas.height/transformY));
+		var drawStartY = -spriteHeight/2 + canvas.height/2;
+
+		var spriteWidth = Math.abs(Math.floor(canvas.height/transformY));
+		var drawStartX = -Math.floor(spriteWidth/2) + spriteScreenX;
+		var drawEndX = spriteWidth/2 + spriteScreenX;
+
+		for(var stripe = drawStartX; stripe < drawEndX; stripe++){
+			window.transformY = transformY;
+			window.stripe = stripe;
+			if(transformY <= 0 || stripe <= 0 || stripe >= canvas.width || transformY >= zBuffer[stripe]){
+				window.clipping = true;
+				continue;
+			}
+			else{
+				window.clipping = false;
+			}
+
+			var texX = Math.floor((stripe - (-spriteWidth/2 + spriteScreenX)) * spriteTexture.width/spriteWidth);
+
+			ctx.drawImage(
+				spriteTexture,
+				texX, 0, 1, spriteTexture.height,
+				stripe, drawStartY, 1, spriteHeight
+			)
 		}
 	}
 }
