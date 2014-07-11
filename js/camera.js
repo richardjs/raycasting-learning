@@ -1,7 +1,5 @@
 'use strict';
 
-var wallTexture = new Image();
-wallTexture.src = 'img/checkered.png';
 var spriteTexture = new Image();
 spriteTexture.src = 'img/ball.png';
 
@@ -125,7 +123,7 @@ Camera.prototype.render = function(canvas, ctx){
 				}
 			}
 
-			if(this.map.at(mapPos.x, mapPos.y) > 0){
+			if(this.map.at(mapPos.x, mapPos.y)){
 				hit = true;
 			}
 		}
@@ -135,6 +133,8 @@ Camera.prototype.render = function(canvas, ctx){
 		if(!hit){
 			continue;
 		}
+
+		var wallType = this.map.at(mapPos.x, mapPos.y);
 
 		// Calculate the distance to hit wall
 		// TODO -- also figure out this formula
@@ -155,6 +155,8 @@ Camera.prototype.render = function(canvas, ctx){
 		var lineTop = canvas.height/2 - lineHeight/2;
 
 		// TODO -- understand these formulas for texture drawing
+
+		var wallTexture = wallType.texture;
 
 		var wallScalar;
 		if(lastSide == 1){
