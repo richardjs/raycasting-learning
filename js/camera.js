@@ -14,6 +14,7 @@ function Camera(map){
 	this.map = map;
 }
 
+Camera.prototype.RESOLUTION = 300;
 Camera.prototype.SKY_COLOR = '#55a';
 Camera.prototype.GROUND_COLOR = '#757';
 Camera.prototype.WALL_X_COLOR = '#5a5';
@@ -41,7 +42,7 @@ Camera.prototype.render = function(canvas, ctx){
 
 	// Cast a ray for each vertical column on the canvas
 	var zBuffer = new Array();
-	for(var canvasX=0; canvasX < canvas.width; canvasX++){
+	for(var renderX=0; renderX < this.RESOLUTION; renderX++){
 		// Ray starts at camera position
 		var rayOrigin = {x: this.pos.x, y: this.pos.y};
 
@@ -50,7 +51,7 @@ Camera.prototype.render = function(canvas, ctx){
 
 		// Position scalar for camera plane, range is [-1, 1]
 		// The left end of the canvas is -1, the center is 0, and right is 1
-		var planeScalar = (2*canvasX / canvas.width) - 1;
+		var planeScalar = (2*renderX / this.RESOLUTION) - 1;
 
 		// Ray direction vector -- add the plane vector multiplied by
 		// the plane scalar to the camera direction
@@ -173,19 +174,20 @@ Camera.prototype.render = function(canvas, ctx){
 			textureX = wallTexture.width - textureX - 1;
 		}
 
+		var stripeWidth = canvas.width/this.RESOLUTION
 		ctx.drawImage(
 			wallTexture,
 			textureX, 0, 1, wallTexture.height,
-			canvasX, lineTop, 1, lineHeight
+			renderX*stripeWidth, lineTop, stripeWidth, lineHeight
 		)
 
 		if(lastSide == 1){
 			ctx.fillStyle = 'rgba(0, 0, 0, .6)';
-			ctx.fillRect(canvasX, lineTop, 1, lineHeight);
+			ctx.fillRect(renderX*stripeWidth, lineTop, stripeWidth, lineHeight);
 		}
 
 		// zBuffer for sprites
-		zBuffer[canvasX] = wallDistance;
+		zBuffer[renderX] = wallDistance;
 		window.zBuffer = zBuffer;
 	}
 
