@@ -40,6 +40,8 @@ Camera.prototype.render = function(canvas, ctx){
 	ctx.fillStyle = this.GROUND_COLOR;
 	ctx.fillRect(0, canvas.height/2, canvas.width, canvas.height/2);
 
+	var stripeWidth = canvas.width/this.RESOLUTION
+
 	// Cast a ray for each vertical column on the canvas
 	var zBuffer = new Array();
 	for(var renderX=0; renderX < this.RESOLUTION; renderX++){
@@ -174,7 +176,6 @@ Camera.prototype.render = function(canvas, ctx){
 			textureX = wallTexture.width - textureX - 1;
 		}
 
-		var stripeWidth = canvas.width/this.RESOLUTION
 		ctx.drawImage(
 			wallTexture,
 			textureX, 0, 1, wallTexture.height,
@@ -192,7 +193,8 @@ Camera.prototype.render = function(canvas, ctx){
 	}
 
 	// Draw sprites
-	// TODO -- clean up to fit with rest of code
+	// TODO -- figure out how all the math with sprites works
+	
 	var sprites = [
 		{x: 15, y: 15}
 	]
@@ -217,19 +219,22 @@ Camera.prototype.render = function(canvas, ctx){
 		var transformX = invDet * (this.dir.y*spriteX - this.dir.x*spriteY);
 		var transformY = invDet * (-this.plane.y*spriteX + this.plane.x*spriteY);
 
-		var spriteScreenX = Math.floor((canvas.width/2) * (1 + transformX/transformY));
+		var spriteScreenX = Math.floor((this.RESOLUTION/2) * (1 + transformX/transformY));
 
 		var spriteHeight = Math.abs(Math.floor(canvas.height/transformY));
 		var drawStartY = -spriteHeight/2 + canvas.height/2;
-
-		var spriteWidth = Math.abs(Math.floor(canvas.height/transformY));
+	
+		// The (this.RESOLUTION/canvas.width) part was added by me
+		// Without it, the sprite is streched along the x-axis
+		// I should probably figure out why
+		var spriteWidth = Math.abs(Math.floor((this.RESOLUTION/canvas.width)*canvas.height/transformY));
 		var drawStartX = -Math.floor(spriteWidth/2) + spriteScreenX;
 		var drawEndX = spriteWidth/2 + spriteScreenX;
 
 		for(var stripe = drawStartX; stripe < drawEndX; stripe++){
 			window.transformY = transformY;
 			window.stripe = stripe;
-			if(transformY <= 0 || stripe <= 0 || stripe >= canvas.width || transformY >= zBuffer[stripe]){
+			if(transformY <= 0 || stripe <= 0 || stripe >= this.RESOLUTION || transformY >= zBuffer[stripe]){
 				window.clipping = true;
 				continue;
 			}
@@ -242,7 +247,7 @@ Camera.prototype.render = function(canvas, ctx){
 			ctx.drawImage(
 				spriteTexture,
 				texX, 0, 1, spriteTexture.height,
-				stripe, drawStartY, 1, spriteHeight
+				stripe*stripeWidth, drawStartY, stripeWidth, spriteHeight
 			)
 		}
 	}
