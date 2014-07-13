@@ -14,7 +14,7 @@ function Camera(map){
 	this.map = map;
 }
 
-Camera.prototype.RESOLUTION = 300;
+Camera.prototype.RESOLUTION = 500;
 Camera.prototype.SKY_COLOR = '#55a';
 Camera.prototype.GROUND_COLOR = '#757';
 Camera.prototype.WALL_X_COLOR = '#5a5';
