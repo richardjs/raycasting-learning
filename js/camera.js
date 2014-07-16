@@ -1,8 +1,5 @@
 'use strict';
 
-var spriteTexture = new Image();
-spriteTexture.src = 'img/ball.png';
-
 function Camera(map){
 	// Camera position
 	this.pos = {x: 22, y: 12};
@@ -193,16 +190,13 @@ Camera.prototype.render = function(canvas, ctx){
 	}
 
 	// Draw sprites
-	// TODO -- this code is largely transcribed from the lodev tutorial;
-	//		change it to be more idiomatic JS and fit better with the rest of the code
+	// TODO -- this code is largely transcribed from the lodev tutorial, with the rest
+	//		somewhat haphazardly coded; change it to be more idiomatic JS and fit
+	//		better with the rest of the code (and be sounder in general)
 	// TODO -- figure out how all the math with sprites works
 	
-	var sprites = [
-		{x: 15, y: 15},
-		{x: 15, y: 16},
-		{x: 16, y: 16},
-		{x: 17, y: 16},
-	]
+	var sprites = map.sprites;
+
 	var spriteOrder = new Array();
 	var spriteDistSquared = new Array();
 	for(var i = 0; i < sprites.length; i++){
@@ -237,7 +231,8 @@ Camera.prototype.render = function(canvas, ctx){
 		var spriteWidth = Math.abs(Math.floor((this.RESOLUTION/canvas.width)*canvas.height/transformY));
 		var drawStartX = -Math.floor(spriteWidth/2) + spriteScreenX;
 		var drawEndX = spriteWidth/2 + spriteScreenX;
-
+		
+		var spriteTexture = sprites[spriteOrder[i]].image;
 		for(var stripe = drawStartX; stripe < drawEndX; stripe++){
 			window.transformY = transformY;
 			window.stripe = stripe;
