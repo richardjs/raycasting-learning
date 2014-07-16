@@ -193,10 +193,15 @@ Camera.prototype.render = function(canvas, ctx){
 	}
 
 	// Draw sprites
+	// TODO -- this code is largely transcribed from the lodev tutorial;
+	//		change it to be more idiomatic JS and fit better with the rest of the code
 	// TODO -- figure out how all the math with sprites works
 	
 	var sprites = [
-		{x: 15, y: 15}
+		{x: 15, y: 15},
+		{x: 15, y: 16},
+		{x: 16, y: 16},
+		{x: 17, y: 16},
 	]
 	var spriteOrder = new Array();
 	var spriteDistSquared = new Array();
@@ -208,7 +213,9 @@ Camera.prototype.render = function(canvas, ctx){
 		spriteDistSquared[i] = spriteXDist*spriteXDist + spriteYDist*spriteYDist;
 	}
 
-	// TODO: sort
+	spriteOrder.sort(function(a, b){
+		return spriteDistSquared[b] - spriteDistSquared[a];
+	});
 
 	for(var i = 0; i < sprites.length; i++){
 		var spriteX = sprites[spriteOrder[i]].x - this.pos.x;
